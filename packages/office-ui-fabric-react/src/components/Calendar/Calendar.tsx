@@ -6,12 +6,19 @@ import { CalendarMonth } from './CalendarMonth';
 import { compareDates, getDateRangeArray } from '../../utilities/dateMath/DateMath';
 import {
   autobind,
-  css,
+  // css,
+  customizable,
   BaseComponent,
   KeyCodes
 } from '../../Utilities';
+import {
+  ICalendarClassNames,
+  getClassNames
+} from './Calendar.classNames';
+/*
 import * as stylesImport from './Calendar.scss';
 const styles: any = stylesImport;
+*/
 
 const leftArrow: string = 'Up';
 const rightArrow: string = 'Down';
@@ -41,6 +48,7 @@ export interface ICalendarState {
   isDayPickerVisible?: boolean;
 }
 
+@customizable('Calendar', ['theme'])
 export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> implements ICalendar {
   public static defaultProps: ICalendarProps = {
     onSelectDate: undefined,
@@ -117,15 +125,42 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
   }
 
   public render() {
-    let rootClass = 'ms-DatePicker';
-    let { firstDayOfWeek, dateRangeType, strings, showMonthPickerAsOverlay, autoNavigateOnSelection, showGoToToday, highlightCurrentMonth, navigationIcons, minDate, maxDate } = this.props;
+    // let rootClass = 'ms-DatePicker';
+    let {
+      className,
+      firstDayOfWeek,
+      dateRangeType,
+      strings,
+      showMonthPickerAsOverlay,
+      autoNavigateOnSelection,
+      showGoToToday,
+      highlightCurrentMonth,
+      navigationIcons,
+      minDate,
+      maxDate,
+      theme,
+      styles: customStyles } = this.props;
+
     let { selectedDate, navigatedDate, isMonthPickerVisible, isDayPickerVisible } = this.state;
     let onHeaderSelect = showMonthPickerAsOverlay ? this._onHeaderSelect : undefined;
-    let monthPickerOnly = !showMonthPickerAsOverlay && !isDayPickerVisible;
+    // let monthPickerOnly = !showMonthPickerAsOverlay && !isDayPickerVisible;
+
+    const classNames = getClassNames(
+      theme!,
+      customStyles!,
+      className!,
+      true,
+      true,
+      isMonthPickerVisible!,
+      isDayPickerVisible!,
+      showMonthPickerAsOverlay!,
+      showGoToToday!
+    );
 
     return (
-      <div className={ css(rootClass, styles.root) } ref='root' role='application'>
+      <div className={ classNames.root } ref='root' role='application'>
         <div
+          /*
           className={ css(
             'ms-DatePicker-picker ms-DatePicker-picker--opened ms-DatePicker-picker--focused',
             styles.picker,
@@ -135,11 +170,19 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
             isMonthPickerVisible && isDayPickerVisible && ('ms-DatePicker-calendarsInline ' + styles.calendarsInline),
             monthPickerOnly && ('ms-DatePicker-monthPickerOnly ' + styles.monthPickerOnly),
             showMonthPickerAsOverlay && ('ms-DatePicker-monthPickerAsOverlay ' + styles.monthPickerAsOverlay),
-          ) }
+          )  } */
+          className={ classNames.picker }
         >
-          <div className={ css('ms-DatePicker-holder ms-slideDownIn10', styles.holder) } onKeyDown={ this._onDatePickerPopupKeyDown }>
-            <div className={ css('ms-DatePicker-frame', styles.frame) }>
-              <div className={ css('ms-DatePicker-wrap', styles.wrap, showGoToToday && styles.goTodaySpacing) }>
+          <div /* className={ css('ms-DatePicker-holder ms-slideDownIn10', styles.holder) } */
+            className={ classNames.holder }
+            onKeyDown={ this._onDatePickerPopupKeyDown }
+          >
+            <div /* className={ css('ms-DatePicker-frame', styles.frame) } */
+              className={ classNames.frame }
+            >
+              <div /* className={ css('ms-DatePicker-wrap', styles.wrap, showGoToToday && styles.goTodaySpacing) } */
+                className={ classNames.wrap }
+              >
                 { isDayPickerVisible && <CalendarDay
                   selectedDate={ selectedDate! }
                   navigatedDate={ navigatedDate! }
@@ -179,7 +222,8 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
                 { showGoToToday &&
                   <span
                     role='button'
-                    className={ css('ms-DatePicker-goToday js-goToday', styles.goToday) }
+                    // className={ css('ms-DatePicker-goToday js-goToday', styles.goToday) }
+                    className={ classNames.goToday }
                     onClick={ this._onGotoToday }
                     onKeyDown={ this._onGotoTodayKeyDown }
                     tabIndex={ 0 }

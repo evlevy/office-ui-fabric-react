@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Calendar } from './Calendar';
 import { DayOfWeek, FirstWeekOfYear, DateRangeType } from '../../utilities/dateValues/DateValues';
+import { IStyle, ITheme } from '../../Styling';
 
 export { DayOfWeek, DateRangeType, FirstWeekOfYear };
 
@@ -132,6 +133,18 @@ export interface ICalendarProps extends React.Props<Calendar> {
   * If set the Calendar will not allow navigation to or selection of a date later than this value.
   */
   maxDate?: Date;
+
+  /**
+ * Theme provided by HOC.
+ */
+  theme?: ITheme;
+
+  /**
+ * Custom styles for this component
+ */
+  styles?: Partial<ICalendarStyles>;
+
+  className?: string;
 }
 
 export interface ICalendarStrings {
@@ -222,4 +235,31 @@ export interface ICalendarFormatDateCallbacks {
   */
   formatYear: (date: Date) => string;
 
+}
+
+export interface ICalendarStyles {
+
+  root: IStyle;
+
+  picker: IStyle;
+
+  holder: IStyle;
+
+  frame: IStyle;
+
+  wrap: IStyle;
+
+  wrapMonthPickerVisible: IStyle;
+
+  goTodaySpacing: IStyle;
+
+  goToday: IStyle;
+
+  goTodayMonthPickerVisible: IStyle;
+
+  goTodayHover: IStyle;
+
+  goTodayActive: IStyle;
+
+  goTodaySpacingMonthPickerVisible: IStyle;
 }
