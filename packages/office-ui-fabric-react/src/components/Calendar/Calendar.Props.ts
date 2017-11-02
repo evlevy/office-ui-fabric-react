@@ -249,17 +249,24 @@ export interface ICalendarStyles {
 
   wrap: IStyle;
 
-  wrapMonthPickerVisible: IStyle;
-
-  goTodaySpacing: IStyle;
-
   goToday: IStyle;
+}
 
-  goTodayMonthPickerVisible: IStyle;
+export interface ICalendarDayStyles {
 
-  goTodayHover: IStyle;
+  dayPicker: IStyle;
 
-  goTodayActive: IStyle;
+  monthComponents: IStyle;
 
-  goTodaySpacingMonthPickerVisible: IStyle;
+  navContainer: IStyle;
+
+  header: IStyle;
+
+  prevMonth: IStyle;
+
+  nextMonth: IStyle;
+
+  monthAndYear: IStyle;
+
+  table: IStyle;
 }

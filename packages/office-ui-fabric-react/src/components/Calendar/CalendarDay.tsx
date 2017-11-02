@@ -3,12 +3,12 @@ import {
   BaseComponent,
   KeyCodes,
   autobind,
-  css,
+  // css,
   getId,
   getRTL,
   getRTLSafeKeyCode
 } from '../../Utilities';
-import { ICalendarStrings, ICalendarIconStrings, ICalendarFormatDateCallbacks } from './Calendar.Props';
+import { ICalendarStrings, ICalendarIconStrings, ICalendarFormatDateCallbacks, ICalendarDayStyles } from './Calendar.Props';
 import { DayOfWeek, MonthOfYear, FirstWeekOfYear, DateRangeType } from '../../utilities/dateValues/DateValues';
 import { FocusZone } from '../../FocusZone';
 import { Icon } from '../../Icon';
@@ -26,9 +26,17 @@ import {
   getMonthEnd
 } from '../../utilities/dateMath/DateMath';
 import TimeConstants from '../../utilities/dateValues/TimeConstants';
+import {
+  ICalendarDayClassNames,
+  getCalendarDayClassNames as getClassNames
+} from './Calendar.classNames';
+import { IStyle, ITheme } from '../../Styling';
 
+/*
+/*
 import * as stylesImport from './Calendar.scss';
 const styles: any = stylesImport;
+*/
 
 const DAYS_IN_WEEK = 7;
 
@@ -62,6 +70,11 @@ export interface ICalendarDayProps extends React.Props<CalendarDay> {
   dateTimeFormatter: ICalendarFormatDateCallbacks;
   minDate?: Date;
   maxDate?: Date;
+  isMonthPickerVisible: boolean;
+  areCalendarsInLine: boolean;
+  theme?: ITheme;
+  styles?: Partial<ICalendarDayStyles>;
+  className?: string;
 }
 
 export interface ICalendarDayState {
@@ -99,7 +112,24 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
 
   public render() {
     let { activeDescendantId, weeks } = this.state;
-    let { firstDayOfWeek, strings, navigatedDate, selectedDate, dateRangeType, navigationIcons, showWeekNumbers, firstWeekOfYear, dateTimeFormatter, minDate, maxDate } = this.props;
+    let {
+      firstDayOfWeek,
+      strings,
+      navigatedDate,
+      selectedDate,
+      dateRangeType,
+      navigationIcons,
+      showWeekNumbers,
+      firstWeekOfYear,
+      dateTimeFormatter,
+      minDate,
+      maxDate,
+      onHeaderSelect,
+      isMonthPickerVisible,
+      areCalendarsInLine,
+      className,
+      theme,
+      styles: customStyles } = this.props;
     let dayPickerId = getId('DatePickerDay-dayPicker');
     let monthAndYearId = getId('DatePickerDay-monthAndYear');
     let leftNavigationIcon = navigationIcons.leftNavigation;
@@ -118,22 +148,25 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
     const prevMonthInBounds = minDate ? compareDatePart(minDate, getMonthStart(navigatedDate)) < 0 : true;
     const nextMonthInBounds = maxDate ? compareDatePart(getMonthEnd(navigatedDate), maxDate) < 0 : true;
 
+
+    const headerToggleView = !!onHeaderSelect;
+    const classNames = getClassNames(
+      theme!,
+      customStyles!,
+      className!,
+      showWeekNumbers!,
+      // false,
+      isMonthPickerVisible,
+      areCalendarsInLine,
+      headerToggleView
+    );
+
     return (
-      <div
-        className={ css('ms-DatePicker-dayPicker',
-          styles.dayPicker,
-          showWeekNumbers && 'ms-DatePicker-showWeekNumbers' && styles.showWeekNumbers
-        ) }
-        id={ dayPickerId }
-      >
-        <div className={ css('ms-DatePicker-monthComponents', styles.monthComponents) }>
-          <div className={ css('ms-DatePicker-navContainer', styles.navContainer) }>
+      <div className={ classNames.dayPicker } id={ dayPickerId }>
+        <div className={ classNames.monthComponents }>
+          <div className={ classNames.navContainer }>
             <span
-              className={ css('ms-DatePicker-prevMonth js-prevMonth', styles.prevMonth,
-                {
-                  ['ms-DatePicker-prevMonth--disabled ' + styles.prevMonthIsDisabled]: !prevMonthInBounds
-                }
-              ) }
+              className={ classNames.prevMonth }
               onClick={ this._onSelectPrevMonth }
               onKeyDown={ this._onPrevMonthKeyDown }
               aria-controls={ dayPickerId }
@@ -142,12 +175,9 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
               tabIndex={ 0 }
             >
               <Icon iconName={ getRTL() ? rightNavigationIcon : leftNavigationIcon } />
-            </span >
+            </span>
             <span
-              className={ css('ms-DatePicker-nextMonth js-nextMonth', styles.nextMonth,
-                {
-                  ['ms-DatePicker-nextMonth--disabled ' + styles.nextMonthIsDisabled]: !nextMonthInBounds
-                }) }
+              className={ classNames.nextMonth }
               onClick={ this._onSelectNextMonth }
               onKeyDown={ this._onNextMonthKeyDown }
               aria-controls={ dayPickerId }
@@ -156,27 +186,21 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
               tabIndex={ 0 }
             >
               <Icon iconName={ getRTL() ? leftNavigationIcon : rightNavigationIcon } />
-            </span >
-          </div >
-        </div >
-        <div className={ css('ms-DatePicker-header', styles.header) } >
+            </span>
+          </div>
+        </div>
+        <div className={ classNames.header }>
           <div aria-live='polite' aria-relevant='text' aria-atomic='true' id={ monthAndYearId }>
-            { this.props.onHeaderSelect ?
-              <div
-                className={ css('ms-DatePicker-monthAndYear js-showMonthPicker', styles.monthAndYear, styles.headerToggleView) }
-                onClick={ this._onHeaderSelect }
-                onKeyDown={ this._onHeaderKeyDown }
-                aria-label={ dateTimeFormatter.formatMonthYear(navigatedDate, strings) }
-                role='button'
-                tabIndex={ 0 }
-              >
-                { dateTimeFormatter.formatMonthYear(navigatedDate, strings) }
-              </div>
-              :
-              <div className={ css('ms-DatePicker-monthAndYear', styles.monthAndYear) }>
-                { dateTimeFormatter.formatMonthYear(navigatedDate, strings) }
-              </div>
-            }
+            <div
+              className={ classNames.monthAndYear }
+              onClick={ headerToggleView ? this._onHeaderSelect : undefined }
+              onKeyDown={ headerToggleView ? this._onHeaderKeyDown : undefined }
+              aria-label={ headerToggleView ? dateTimeFormatter.formatMonthYear(navigatedDate, strings) : undefined }
+              role={ headerToggleView ? 'button' : undefined }
+              tabIndex={ headerToggleView ? 0 : undefined }
+            >
+              { dateTimeFormatter.formatMonthYear(navigatedDate, strings) }
+            </div>
           </div>
         </div>
         <FocusZone>

@@ -144,17 +144,17 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
     let { selectedDate, navigatedDate, isMonthPickerVisible, isDayPickerVisible } = this.state;
     let onHeaderSelect = showMonthPickerAsOverlay ? this._onHeaderSelect : undefined;
     // let monthPickerOnly = !showMonthPickerAsOverlay && !isDayPickerVisible;
+    const areCalendarsInLine = isMonthPickerVisible && isDayPickerVisible;
 
     const classNames = getClassNames(
       theme!,
       customStyles!,
       className!,
-      true,
-      true,
       isMonthPickerVisible!,
       isDayPickerVisible!,
       showMonthPickerAsOverlay!,
-      showGoToToday!
+      showGoToToday!,
+      areCalendarsInLine!
     );
 
     return (
@@ -202,6 +202,9 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
                   minDate={ minDate }
                   maxDate={ maxDate }
                   ref='dayPicker'
+                  theme={ theme }
+                  areCalendarsInLine={ areCalendarsInLine! }
+                  isMonthPickerVisible={ isMonthPickerVisible! }
                 />
                 }
 

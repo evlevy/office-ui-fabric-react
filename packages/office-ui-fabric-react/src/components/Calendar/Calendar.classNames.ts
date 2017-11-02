@@ -1,4 +1,4 @@
-import { ICalendarStyles } from './Calendar.Props';
+import { ICalendarStyles, ICalendarDayStyles } from './Calendar.Props';
 import { memoizeFunction } from '../../Utilities';
 import {
   mergeStyles,
@@ -9,7 +9,8 @@ import {
   ITheme,
   concatStyleSets,
   getFocusStyle,
-  AnimationStyles
+  AnimationStyles,
+  IconFontSizes
 } from '../../Styling';
 
 export interface ICalendarClassNames {
@@ -21,50 +22,63 @@ export interface ICalendarClassNames {
   goToday: string;
 }
 
+export interface ICalendarDayClassNames {
+  dayPicker: string;
+  monthComponents: string;
+  navContainer: string;
+  header: string;
+  prevMonth: string;
+  nextMonth: string;
+  monthAndYear: string;
+  table: string;
+}
+
+const MS_SMALLSCREEN_ACTIVE = '@media (max-device-width: 459px)';
+const MS_LARGESCREEN_ACTIVE = '@media (min-device-width: 460px)';
+const CalendarDarPickerDayMargin = '10px';
+const CalendarDay = '40px';
+
 export const getClassNames = memoizeFunction((
   theme: ITheme,
   customStyles: Partial<ICalendarStyles>,
   className: string,
-  isPickerOpened: boolean,
-  isPickerFocused: boolean,
+  // isPickerOpened: boolean, <- always true
+  // isPickerFocused: boolean, <- always true
   isMonthPickerVisible: boolean,
   isDayPickerVisible: boolean,
   showMonthPickerAsOverlay: boolean,
-  showGoToToday: boolean
+  showGoToToday: boolean,
+  areCalendarsInLine: boolean
 ): ICalendarClassNames => {
 
-  const areCalendarsInLine = isMonthPickerVisible && isDayPickerVisible;
+
   const monthPickerOnly = !showMonthPickerAsOverlay && !isDayPickerVisible;
 
   const { semanticColors, fonts, palette } = theme;
 
-  const MS_SMALLSCREEN_ACTIVE = '@media (max-device-width: 459px)';
-  const MS_LARGESCREEN_ACTIVE = '@media (min-device-width: 460px)';
   const CalendarPickerTextColor = palette.black;
-  const CalendarGoTodayTextColor = theme.palette.neutralPrimary;
-  const CalendarGoTodayHoverTextColor = theme.palette.themePrimary;
-  const CalendarGoTodayActiveTextColor = theme.palette.themeDark;
+  const CalendarGoTodayTextColor = palette.neutralPrimary;
+  const CalendarGoTodayHoverTextColor = palette.themePrimary;
+  const CalendarGoTodayActiveTextColor = palette.themeDark;
 
   return mergeStyleSets(
     {
-      root: [
-        'ms-DatePicker'
-      ],
+      root: ['ms-DatePicker'],
 
       picker: [
         'ms-DatePicker-picker',
+        'ms-DatePicker-picker--opened',
+        'ms-DatePicker-picker--focused',
         fonts.medium,
         {
           color: CalendarPickerTextColor,
           position: 'relative',
           textAlign: 'left'
         },
-        isPickerOpened && 'ms-DatePicker-picker--opened',
-        isPickerFocused && 'ms-DatePicker-picker--focused',
         isMonthPickerVisible && 'ms-DatePicker-picker--monthPickerVisible',
         isDayPickerVisible && 'ms-DatePicker-picker--dayPickerVisible',
         areCalendarsInLine && 'ms-DatePicker-picker--calendarsInline',
-        !showMonthPickerAsOverlay && !isDayPickerVisible && 'ms-DatePicker-picker--monthPickerOnly',
+        monthPickerOnly && 'ms-DatePicker-picker--monthPickerOnly',
         showMonthPickerAsOverlay && 'ms-DatePicker-picker--monthPickerAsOverlay'
       ],
 
@@ -137,6 +151,7 @@ export const getClassNames = memoizeFunction((
               }
             ],
             'span:focus': {
+
               // @include focus-border(1px, $ms-color-neutralSecondary);
             },
             'div:focus': {
@@ -193,6 +208,178 @@ export const getClassNames = memoizeFunction((
 
         }
       ]
+    },
+    customStyles
+  );
+});
+
+export const getCalendarDayClassNames = memoizeFunction((
+  theme: ITheme,
+  customStyles: Partial<ICalendarDayStyles>,
+  className: string,
+  showWeekNumbers: boolean,
+  // isPickingYears: boolean <- this apparently is not set anywhere!
+  isMonthPickerVisible: boolean,
+  areCalendarsInLine: boolean,
+  headerToggleView: boolean
+): ICalendarDayClassNames => {
+
+  const { semanticColors, fonts, palette } = theme;
+
+  const navigatorStyle: IRawStyle =
+    {
+      width: CalendarDay,
+      height: CalendarDay,
+      display: 'inline-block',
+      textAlign: 'center',
+      lineHeight: CalendarDay,
+      fontSize: IconFontSizes.medium,
+      color: theme.palette.neutralDark,
+      position: 'relative',
+      top: '2px',
+      selectors: {
+        ':hover': {
+          color: theme.palette.neutralDark,
+          cursor: 'pointer',
+          outline: '1px solid transparent',
+          backgroundColor: theme.palette.neutralTertiaryAlt
+        },
+        [MS_LARGESCREEN_ACTIVE]: {
+          fontSize: '14px',
+          width: '24px',
+          height: '24px',
+          lineHeight: '24px'
+        }
+      }
+    }
+
+  return mergeStyleSets(
+    {
+      dayPicker: [
+        'ms-DatePicker-dayPicker',
+        /* isPickingYears && {
+          display: 'none'
+        }, */
+        {
+          display: 'block',
+          selectors: {
+            [MS_LARGESCREEN_ACTIVE]: [
+              {
+                minHeight: '214px'
+              },
+              isMonthPickerVisible && {
+                margin: `-${CalendarDarPickerDayMargin} 0`,
+                padding: `${CalendarDarPickerDayMargin} 0`,
+                // @include ms-borderBox;
+                // @include border-right(1px, solid, $ms-color-neutralLight);
+                width: '212px',
+                minHeight: '214px',
+              },
+              isMonthPickerVisible && /* isPickingYears && */ {
+                display: 'block'
+              },
+              areCalendarsInLine && {
+                width: 'auto'
+              }
+            ]
+          }
+        },
+        showWeekNumbers && ['ms-DatePicker-showWeekNumbers']
+      ],
+
+      monthComponents: [
+        'ms-DatePicker-monthComponents',
+        {
+          display: 'inline-flex',
+          marginLeft: '3px'
+        }
+      ],
+
+      navContainer: [
+        'ms-DatePicker-navContainer'
+      ],
+
+      prevMonth: [
+        'ms-DatePicker-prevMonth',
+        'js-prevMonth',
+        navigatorStyle
+      ],
+
+      nextMonth: [
+        'ms-DatePicker-nextMonth',
+        'js-nextMonth',
+        navigatorStyle,
+        {
+          marginLeft: '3px'
+        }
+      ],
+
+      monthAndYear: [
+        'ms-DatePicker-monthAndYear',
+        headerToggleView && 'js-showMonthPicker',
+        fonts.xLarge,
+        {
+          display: 'inline-block',
+          color: theme.palette.neutralPrimary,
+          marginTop: '-1px',
+          fontWeight: FontWeights.semilight,
+          padding: '0 5px',
+          // @include margin-left(5px);
+          selectors: {
+            [MS_LARGESCREEN_ACTIVE]: [
+              {
+                fontSize: '17px',
+                color: theme.palette.neutralPrimary
+              },
+            ]
+          }
+        }
+      ],
+
+      header: [
+        'ms-DatePicker-header',
+        {
+          position: 'relative',
+          display: 'inline-flex',
+          height: CalendarDay,
+          lineHeight: '44px',
+          selectors: {
+            [MS_LARGESCREEN_ACTIVE]: [
+              {
+                height: CalendarDay,
+                lineHeight: CalendarDay
+              }
+            ]
+          }
+        }
+      ],
+
+      table: [
+        'ms-DatePicker-table',
+        {
+          textAlign: 'center',
+          borderCollapse: 'collapse',
+          borderSpacing: '0',
+          tableLayout: 'fixed',
+          fontSize: 'inherit',
+          marginTop: '10px',
+          selectors: {
+            '& td': [
+              {
+                margin: '0',
+                padding: '0',
+                selectors: {
+                  ':hover': {
+                    outline: '1px solid transparent'
+                  }
+                }
+
+              }
+            ]
+          }
+        }
+      ]
+
     },
     customStyles
   );
