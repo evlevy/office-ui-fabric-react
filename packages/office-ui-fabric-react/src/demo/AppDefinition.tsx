@@ -41,6 +41,12 @@ export const AppDefinition: IAppDefinition = {
           url: '#/examples/calendar'
         },
         {
+          component: require<any>('../components/Calendar2/CalendarPage').CalendarPage,
+          key: 'Calendar2',
+          name: 'Calendar2',
+          url: '#/examples/calendar2'
+        },
+        {
           component: require<any>('../components/Callout/CalloutPage').CalloutPage,
           key: 'Callout',
           name: 'Callout',

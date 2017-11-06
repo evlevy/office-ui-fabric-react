@@ -14,7 +14,11 @@ module.exports = function (options) {
       // Specify the config file.
       `--config ${jestConfigPath}`,
 
-      // Run tests in serial (parallel builds seem to hang rush.)
+      /**
+       * Run tests in serial (parallel builds seem to hang rush.)
+       * Remove this when: https://github.com/facebook/jest/issues/4444 resloved
+       * and jest updated.
+       **/
       `--runInBand`,
 
       // In production builds, produce coverage information.
