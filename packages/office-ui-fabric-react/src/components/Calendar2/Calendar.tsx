@@ -1,16 +1,28 @@
 import * as React from 'react';
-import { styled } from '../../Styling';
-import { ICalendarProps } from './Calendar.types';
 import { CalendarBase } from './Calendar.base';
-import { CalendarDayPicker } from './CalendarDayPicker';
-import { ICalendarDayPickerProps } from './CalendarDayPicker.types';
 import { CalendarDay } from './CalendarDay';
+import { CalendarDayPicker } from './CalendarDayPicker';
+import { CalendarMonth } from './CalendarMonth';
+import { CalendarMonthPicker } from './CalendarMonthPicker';
 import { getStyles } from './Calendar.styles';
+import { ICalendarDayPickerProps } from './CalendarDayPicker.types';
+import { ICalendarMonthPickerProps } from './CalendarMonthPicker.types';
+import { ICalendarProps } from './Calendar.types';
+import { styled } from '../../Styling';
 
 export const Calendar = styled(
   CalendarBase,
   getStyles,
   props => ({
-    dayPickerAs: (dayPickerProps: ICalendarDayPickerProps) => <CalendarDayPicker dateAs={ CalendarDay } { ...dayPickerProps } />
+    dayPickerAs: (dayPickerProps: ICalendarDayPickerProps) => (
+      <CalendarDayPicker
+        dayAs={ CalendarDay }
+        { ...dayPickerProps }
+      />),
+    monthPickerAs: (monthPickerProps: ICalendarMonthPickerProps) => (
+      <CalendarMonthPicker
+        monthAs={ CalendarMonth }
+        { ...monthPickerProps }
+      />)
   })
 );

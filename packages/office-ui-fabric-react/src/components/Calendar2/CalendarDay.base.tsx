@@ -1,21 +1,13 @@
 import * as React from 'react';
-import { BaseComponent, getId, customizable, autobind } from '../../Utilities';
-import { ICalendarDayProps, ICalendarDayStyles, ICalendarDayStyleProps, CornerType } from './CalendarDay.types';
-import { DateRangeType } from '../../utilities/dateValues/DateValues';
+import { autobind, BaseComponent, customizable } from '../../Utilities';
 import {
-  addDays,
-  addWeeks,
-  addMonths,
-  compareDates,
-  compareDatePart,
-  getDateRangeArray,
-  isInDateRangeArray,
-  getWeekNumber,
-  getWeekNumbersInMonth,
-  getMonthStart,
-  getMonthEnd
-} from '../../utilities/dateMath/DateMath';
+  CalendarDayCornerType,
+  ICalendarDayProps,
+  ICalendarDayStyleProps,
+  ICalendarDayStyles
+} from './CalendarDay.types';
 import { classNamesFunction } from '../../Styling';
+import { DateRangeType } from '../../utilities/dateValues/DateValues';
 
 const getClassNames = classNamesFunction<ICalendarDayStyleProps, ICalendarDayStyles>();
 
@@ -28,20 +20,20 @@ export class CalendarDayBase extends BaseComponent<ICalendarDayProps, {}> {
 
   public render() {
     const {
-      theme,
-      getStyles,
-      className,
       children,
+      className,
       cornerType,
+      dateRangeType,
+      getStyles,
       isInBounds,
       isInMonth,
+      isNavigated,
       isSelected,
       isSelectedWeek,
-      isNavigated,
       isToday,
-      dateRangeType,
       onClick,
-      onKeyDown } = this.props;
+      onKeyDown,
+      theme } = this.props;
 
     // Background
     const isWeekBackgroud = isSelected && dateRangeType === DateRangeType.Week;
@@ -54,12 +46,6 @@ export class CalendarDayBase extends BaseComponent<ICalendarDayProps, {}> {
     const isFocused = isInBounds && isInMonth;
     const isOutOfFocus = isInBounds && !isInMonth;
 
-    // Corner
-    const isTopCorner = !!cornerType && (cornerType === CornerType.TopLeft || cornerType === CornerType.TopRight || cornerType === CornerType.TopSingle);
-    const isBottomCorner = !!cornerType && (cornerType === CornerType.BottomLeft || cornerType === CornerType.BottomRight || cornerType === CornerType.BottomSingle);
-    const isLeftCorner = !!cornerType && (cornerType === CornerType.BottomLeft || cornerType === CornerType.TopLeft);
-    const isRightCorner = !!cornerType && (cornerType === CornerType.BottomRight || cornerType === CornerType.TopRight);
-
     const classNames = getClassNames(
       getStyles!,
       {
@@ -70,30 +56,26 @@ export class CalendarDayBase extends BaseComponent<ICalendarDayProps, {}> {
         isOutOfFocus: isOutOfFocus!,
         isHighlighted: isHighlighted!,
         isWeekHighlighted: isSelectedWeek!,
-        isBottomCorner: isBottomCorner,
-        isTopCorner: isTopCorner,
-        isLeftCorner: isLeftCorner,
-        isRightCorner: isRightCorner,
         isDayBackground: isDayBackground!,
         isMonthBackground: isMonthBackround!,
-        isWeekBackgroud: isWeekBackgroud!,
-        isToday: isToday!
+        isWeekBackground: isWeekBackgroud!,
+        isToday: isToday!,
+        cornerType: cornerType || CalendarDayCornerType.None
       });
 
     return (
-      <td
-        className={ classNames.background }
-      >
+      < td className={ classNames.root } >
         <div
           className={ classNames.day }
           role={ 'gridcell' }
           onClick={ !!onClick ? this._onClick : undefined }
           onKeyDown={ !!onKeyDown ? this._onKeyDown : undefined }
+          aria-selected={ isInBounds ? isSelected : undefined }
+          data-is-focusable={ isInBounds ? true : undefined }
         >
           { children }
         </div>
-      </td>
-    );
+      </td >);
   }
 
   @autobind

@@ -5,13 +5,18 @@ import { CalendarDayBase } from './CalendarDay.base';
 import { DateRangeType } from './Calendar.types';
 import { ITheme, IStyle, IStyleFunction } from '../../Styling';
 
-export enum CornerType {
+export enum CalendarDayCornerType {
+  'None' = 0,
   'TopLeft' = 1,
   'TopSingle' = 2,
   'TopRight' = 3,
   'BottomLeft' = 4,
   'BottomSingle' = 5,
   'BottomRight' = 6
+}
+
+export interface ICalendarDay {
+
 }
 
 export interface ICalendarDayProps extends React.Props<CalendarDayBase> {
@@ -28,7 +33,7 @@ export interface ICalendarDayProps extends React.Props<CalendarDayBase> {
    */
   getStyles?: IStyleFunction<ICalendarDayStyleProps, ICalendarDayStyles>;
 
-  componentRef?: () => void;
+  componentRef?: (component: ICalendarDay) => void;
 
   className?: string;
 
@@ -48,7 +53,7 @@ export interface ICalendarDayProps extends React.Props<CalendarDayBase> {
 
   onKeyDown?: (ev?: React.KeyboardEvent<HTMLElement>) => void;
 
-  cornerType?: CornerType;
+  cornerType?: CalendarDayCornerType;
 
   dateRangeType?: DateRangeType;
 }
@@ -56,22 +61,19 @@ export interface ICalendarDayProps extends React.Props<CalendarDayBase> {
 export interface ICalendarDayStyleProps {
   theme: ITheme;
   className?: string;
-  isHighlighted: boolean;
-  isWeekHighlighted: boolean;
+  cornerType: CalendarDayCornerType;
+  isDayBackground: boolean;
   isDisabled: boolean;
   isFocused: boolean;
+  isHighlighted: boolean;
+  isMonthBackground: boolean;
   isOutOfFocus: boolean;
   isToday: boolean;
-  isWeekBackgroud: boolean;
-  isMonthBackground: boolean;
-  isDayBackground: boolean;
-  isTopCorner: boolean;
-  isBottomCorner: boolean;
-  isLeftCorner: boolean;
-  isRightCorner: boolean;
+  isWeekBackground: boolean;
+  isWeekHighlighted: boolean;
 }
 
 export interface ICalendarDayStyles {
-  background: IStyle;
+  root: IStyle;
   day: IStyle;
 }

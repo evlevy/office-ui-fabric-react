@@ -1,41 +1,37 @@
-import { ICalendarDayPickerStyleProps, ICalendarDayPickerStyles } from './CalendarDayPicker.types';
 import {
-  FontWeights,
-  IRawStyle,
-  IconFontSizes,
-  ScreenWidthMinMedium,
-  ScreenWidthMaxSmall,
   ColorClassNames,
-  FontClassNames
+  FontClassNames,
+  FontSizes,
+  FontWeights,
+  IconFontSizes,
+  IRawStyle,
+  ScreenWidthMaxSmall,
+  ScreenWidthMinMedium
 } from '../../Styling';
+import { ICalendarDayPickerStyleProps, ICalendarDayPickerStyles } from './CalendarDayPicker.types';
 
 export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPickerStyles => {
 
-  const MS_SMALLSCREEN_ACTIVE = `@media (max-device-width: ${ScreenWidthMaxSmall}px)`;
   const MS_LARGESCREEN_ACTIVE = `@media (min-device-width: ${ScreenWidthMinMedium}px)`;
 
   const {
     theme,
-    isMonthPickerVisible,
-    showWeekNumbers,
-    areCalendarsInline,
+    className,
     headerToggleView,
+    isInline,
+    isMonthPickerVisible,
     nextMonthInBounds,
-    prevMonthInBounds
-  } = props;
+    prevMonthInBounds,
+    showWeekNumbers } = props;
 
   const { semanticColors, fonts, palette } = theme;
 
-  const CalendarDarPickerDayMargin = '10px';
-  const CalendarDaySmall = '40px';
-  const CalendarDayLarge = '28px';
-
-  const navigatorStyle: IRawStyle = {
-    width: CalendarDaySmall,
-    height: CalendarDaySmall,
+  const navItemStyle: IRawStyle = {
+    width: '40px',
+    height: '40px',
     display: 'inline-block',
     textAlign: 'center',
-    lineHeight: CalendarDaySmall,
+    lineHeight: '40px',
     fontSize: IconFontSizes.medium,
     color: palette.neutralDark,
     position: 'relative',
@@ -56,9 +52,56 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
     }
   };
 
+  const weeknumberStyle: IRawStyle = {
+    width: '30px',
+    height: '40px',
+    padding: '0',
+    lineHeight: '40px',
+    color: palette.neutralSecondary,
+    boxSizing: 'border-box',
+    borderRadius: '2px',
+    selectors: {
+      [MS_LARGESCREEN_ACTIVE]: {
+        marginLeft: '-7px',
+        width: '26px',
+        height: '28px',
+        lineHeight: '28px',
+        fontSize: FontSizes.small
+      }
+    }
+  };
+
+  const tableStyle: IRawStyle = {
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    borderSpacing: '0',
+    tableLayout: 'fixed',
+    fontSize: 'inherit',
+    marginTop: '10px',
+    selectors: {
+      '& td': [
+        {
+          margin: '0',
+          padding: '0',
+          selectors: {
+            ':hover': {
+              outline: '1px solid transparent'
+            }
+          }
+
+        }
+      ],
+      [MS_LARGESCREEN_ACTIVE]: [
+        isInline && {
+          marginRight: '12px'
+        }
+      ]
+    }
+  };
+
   return {
 
-    dayPicker: [
+    root: [
       'ms-DatePicker-dayPicker',
       /* isPickingYears && {
         display: 'none'
@@ -71,17 +114,19 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
               minHeight: '214px'
             },
             isMonthPickerVisible && {
-              margin: `-${CalendarDarPickerDayMargin} 0`,
-              padding: `${CalendarDarPickerDayMargin} 0`,
+              margin: '-10px 0',
+              padding: '10px 0',
               boxSizing: 'border-box',
               borderRight: `1px solid ${palette.neutralLight}`,
               width: '212px',
-              minHeight: '214px',
+              minHeight: '214px'
             },
-            isMonthPickerVisible && /* isPickingYears && */ {
+            /*
+            isMonthPickerVisible &&  isPickingYears &&  {
               display: 'block'
             },
-            areCalendarsInline && {
+            */
+            isInline && {
               width: 'auto'
             }
           ]
@@ -105,7 +150,7 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
     prevMonth: [
       'ms-DatePicker-prevMonth',
       'js-prevMonth',
-      navigatorStyle,
+      navItemStyle,
       !prevMonthInBounds && [
         'ms-DatePicker-prevMonth--disabled',
         {
@@ -117,7 +162,7 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
     nextMonth: [
       'ms-DatePicker-nextMonth',
       'js-nextMonth',
-      navigatorStyle,
+      navItemStyle,
       {
         marginLeft: '3px'
       },
@@ -152,16 +197,19 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
     ],
 
     weekNumbers: [
+      'ms-DatePicker-table',
       'ms-DatePicker-weekNumbers',
+      tableStyle,
       {
         position: 'absolute',
-        marginTop: CalendarDaySmall,
+        marginTop: '40px',
         borderRight: `1px solid ${palette.neutralLight}`,
         boxSizing: 'border-box',
         width: '30px',
         selectors: {
           [MS_LARGESCREEN_ACTIVE]: [
             {
+              marginTop: '28px',
               width: '26px',
               marginLeft: '-7px'
             }
@@ -170,17 +218,59 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
       }
     ],
 
+    table: [
+      'ms-DatePicker-table',
+      tableStyle,
+      showWeekNumbers && {
+        marginLeft: '30px'
+      },
+      {
+        selectors: {
+          [MS_LARGESCREEN_ACTIVE]: [
+            showWeekNumbers && {
+              marginLeft: '19px'
+            }
+          ]
+        }
+      }
+    ],
+
+    weekNumber: [
+      'ms-DatePicker-weekNumber',
+      fonts.mediumPlus,
+      weeknumberStyle
+    ],
+
+    selectedWeekNumber: [
+      'ms-DatePicker-weekNumber--selected',
+      fonts.mediumPlus,
+      weeknumberStyle,
+      {
+        color: palette.black
+      }
+    ],
+
     weekday: [
       'ms-DatePicker-weekday',
       fonts.mediumPlus,
       {
-        width: CalendarDaySmall,
-        height: CalendarDaySmall,
+        width: showWeekNumbers ? '30px' : '40px',
+        height: '40px',
         padding: '0',
-        lineHeight: CalendarDaySmall,
+        lineHeight: '40px',
         color: palette.neutralPrimary,
         boxSizing: 'border-box',
-        borderRadius: '2px'
+        borderRadius: '2px',
+        selectors: {
+          [MS_LARGESCREEN_ACTIVE]: [
+            {
+              width: showWeekNumbers ? '26px' : '28px',
+              height: '28px',
+              lineHeight: '28px',
+              fontSize: FontSizes.small
+            }
+          ]
+        }
       }
     ],
 
@@ -193,58 +283,13 @@ export const getStyles = (props: ICalendarDayPickerStyleProps): ICalendarDayPick
       {
         position: 'relative',
         display: 'inline-flex',
-        height: CalendarDaySmall,
+        height: '40px',
         lineHeight: '44px',
         selectors: {
           [MS_LARGESCREEN_ACTIVE]: [
             {
-              height: CalendarDayLarge,
-              lineHeight: CalendarDayLarge
-            }
-          ]
-        }
-      }
-    ],
-
-    table: [
-      'ms-DatePicker-table',
-      showWeekNumbers && {
-        selectors: {
-          '& not($weekNumbers)': {
-            marginLeft: '30px'
-          }
-        }
-      },
-      {
-        textAlign: 'center',
-        borderCollapse: 'collapse',
-        borderSpacing: '0',
-        tableLayout: 'fixed',
-        fontSize: 'inherit',
-        marginTop: '10px',
-        selectors: {
-          '& td': [
-            {
-              margin: '0',
-              padding: '0',
-              selectors: {
-                ':hover': {
-                  outline: '1px solid transparent'
-                }
-              }
-
-            }
-          ],
-          [MS_LARGESCREEN_ACTIVE]: [
-            showWeekNumbers && {
-              selectors: {
-                '& not($weekNumbers)': {
-                  marginLeft: '19px'
-                }
-              }
-            },
-            areCalendarsInline && {
-              marginRight: '12px'
+              height: '28px',
+              lineHeight: '28px'
             }
           ]
         }

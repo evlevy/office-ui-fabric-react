@@ -1,12 +1,10 @@
-/* tslint:disable:no-unused-variable */
 import * as React from 'react';
-/* tslint:enable:no-unused-variable */
 import { CalendarBase } from './Calendar.base';
-import { ICalendarDayPickerProps, ICalendarDayPickerStyleProps, ICalendarDayPickerStyles } from './CalendarDayPicker.types';
-import { ICalendarDayStyleProps, ICalendarDayStyles } from './CalendarDay.types';
-import { DayOfWeek, FirstWeekOfYear, DateRangeType } from '../../utilities/dateValues/DateValues';
-import { ITheme, IStyle, IStyleFunction } from '../../Styling';
+import { DateRangeType, DayOfWeek, FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
+import { ICalendarDayPickerProps } from './CalendarDayPicker.types';
+import { ICalendarMonthPickerProps } from './CalendarMonthPicker.types';
 import { IComponentAs } from '../../Utilities';
+import { IStyle, IStyleFunction, ITheme } from '../../Styling';
 
 export { DayOfWeek, DateRangeType, FirstWeekOfYear };
 
@@ -34,6 +32,11 @@ export interface ICalendarProps extends React.Props<CalendarBase> {
    * Allows the day picker to be reconfigured.
    */
   dayPickerAs?: IComponentAs<ICalendarDayPickerProps>;
+
+  /**
+ * Allows the month picker to be reconfigured.
+ */
+  monthPickerAs?: IComponentAs<ICalendarMonthPickerProps>;
 
   /**
   * Callback issued when a date is selected
@@ -168,11 +171,6 @@ export interface ICalendarProps extends React.Props<CalendarBase> {
   getStyles?: IStyleFunction<ICalendarStyleProps, ICalendarStyles>;
 
   /**
-   * Call to provide customized styling that will layer on top of the variant rules.
-   */
-  getDayStyles?: IStyleFunction<ICalendarDayStyleProps, ICalendarDayStyles>;
-
-  /**
   * Whether the calendar should show 6 weeks by default.
   * @defaultvalue false
   */
@@ -272,19 +270,19 @@ export interface ICalendarFormatDateCallbacks {
 export interface ICalendarStyleProps {
   theme: ITheme;
   className?: string;
-  isMonthPickerVisible: boolean;
+  arePickersInline: boolean;
   isDayPickerVisible: boolean;
-  showMonthPickerAsOverlay: boolean;
-  showGoToToday: boolean;
-  areCalendarsInline: boolean;
+  isMonthPickerVisible: boolean;
   isPickerOpened: boolean;
+  showGoToToday: boolean;
+  showMonthPickerAsOverlay: boolean;
 }
 
 export interface ICalendarStyles {
   root: IStyle;
-  picker: IStyle;
-  holder: IStyle;
   frame: IStyle;
-  wrap: IStyle;
   goToToday: IStyle;
+  holder: IStyle;
+  picker: IStyle;
+  wrap: IStyle;
 }

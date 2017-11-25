@@ -9,3 +9,11 @@ export * from './CalendarDayPicker';
 export * from './CalendarDay';
 export * from './CalendarDay.types';
 export * from './CalendarDay.base';
+
+export * from './CalendarMonthPicker';
+export * from './CalendarMonthPicker.base';
+export * from './CalendarMonthPicker.types';
+
+export * from './CalendarMonth';
+export * from './CalendarMonth.types';
+export * from './CalendarMonth.base';

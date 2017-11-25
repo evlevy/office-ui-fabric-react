@@ -1,4 +1,4 @@
-import { ICalendarDayStyleProps, ICalendarDayStyles } from './CalendarDay.types';
+import { ICalendarDayStyleProps, ICalendarDayStyles, CalendarDayCornerType } from './CalendarDay.types';
 import {
   FontWeights,
   FontSizes,
@@ -14,18 +14,16 @@ export const getStyles = (props: ICalendarDayStyleProps): ICalendarDayStyles => 
   const MS_LARGESCREEN_ACTIVE = `@media (min-device-width: ${ScreenWidthMinMedium}px)`;
 
   const {
-    isBottomCorner,
+    className,
+    cornerType,
     isDayBackground,
     isDisabled,
     isFocused,
     isHighlighted,
-    isLeftCorner,
     isMonthBackground,
     isOutOfFocus,
-    isRightCorner,
     isToday,
-    isTopCorner,
-    isWeekBackgroud,
+    isWeekBackground,
     isWeekHighlighted,
     theme
   } = props;
@@ -34,8 +32,8 @@ export const getStyles = (props: ICalendarDayStyleProps): ICalendarDayStyles => 
 
   return {
 
-    background: [
-      isWeekBackgroud && [
+    root: [
+      isWeekBackground && [
         'ms-DatePicker-weekBackground',
         {
           background: palette.neutralLight,
@@ -68,6 +66,7 @@ export const getStyles = (props: ICalendarDayStyleProps): ICalendarDayStyles => 
 
     day: [
       'ms-DatePicker-day',
+      className,
       fonts.mediumPlus,
       {
         width: '40px',
@@ -184,42 +183,42 @@ export const getStyles = (props: ICalendarDayStyleProps): ICalendarDayStyles => 
         background: palette.neutralTertiary
       },
 
-      isTopCorner && isLeftCorner && [
+      (cornerType === CalendarDayCornerType.TopLeft) && [
         'ms-DatePicker-topLeftCornerDate',
         {
           borderRadius: '0'
         }
       ],
 
-      isTopCorner && isRightCorner && [
+      (cornerType === CalendarDayCornerType.TopRight) && [
         'ms-DatePicker-topRightCornerDate',
         {
           borderRadius: '0'
         }
       ],
 
-      isTopCorner && !(isRightCorner || !isLeftCorner) && [
+      (cornerType === CalendarDayCornerType.TopSingle) && [
         'ms-DatePicker-topRightSingleDate',
         {
           borderRadius: '0'
         }
       ],
 
-      isBottomCorner && isLeftCorner && [
+      (cornerType === CalendarDayCornerType.BottomLeft) && [
         'ms-DatePicker-bottomLeftCornerDate',
         {
           borderRadius: '0'
         }
       ],
 
-      isBottomCorner && isRightCorner && [
+      (cornerType === CalendarDayCornerType.BottomRight) && [
         'ms-DatePicker-bottomRightCornerDate',
         {
           borderRadius: '0'
         }
       ],
 
-      isBottomCorner && !(isRightCorner || isLeftCorner) && [
+      (cornerType === CalendarDayCornerType.BottomSingle) && [
         'ms-DatePicker-bottomSingleCornerDate',
         {
           borderRadius: '0'

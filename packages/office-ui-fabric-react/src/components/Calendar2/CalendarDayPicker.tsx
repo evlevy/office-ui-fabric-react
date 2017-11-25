@@ -9,6 +9,6 @@ export const CalendarDayPicker = styled(
   CalendarDayPickerBase,
   getStyles,
   props => ({
-    dateAs: CalendarDay
+    dayAs: CalendarDay
   })
 );

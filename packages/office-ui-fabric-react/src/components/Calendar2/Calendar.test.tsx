@@ -213,7 +213,7 @@ describe('Calendar', () => {
     });
 
     it('Verify month picker months', () => {
-      let months = domElement.querySelectorAll('.ms-DatePicker-monthOption');
+      let months = domElement.querySelectorAll('.ms-DatePicker-month');
 
       expect(months.length).toEqual(12);
       for (let i = 0; i < 12; i++) {
