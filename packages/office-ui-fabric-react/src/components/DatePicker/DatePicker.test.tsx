@@ -2,9 +2,10 @@ import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import { Calendar, ICalendarStrings } from '../Calendar';
 import { DatePicker } from './DatePicker';
+import { DatePickerBase } from './DatePicker.base';
 import { IDatePickerStrings } from './DatePicker.types';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
-import { shallow, mount, ReactWrapper } from 'enzyme';
+import { shallow, mount, ShallowWrapper } from 'enzyme';
 
 describe('DatePicker', () => {
   it('renders default DatePicker correctly', () => {
@@ -15,7 +16,7 @@ describe('DatePicker', () => {
   });
 
   describe('when Calendar properties are not specified', () => {
-    const datePicker = shallow(<DatePicker />);
+    const datePicker = shallow(<DatePickerBase />).dive();
     datePicker.setState({ isDatePickerShown: true });
     const calendarProps = datePicker.find(Calendar).props();
 
@@ -55,7 +56,7 @@ describe('DatePicker', () => {
     };
 
     const datePicker = shallow(
-      <DatePicker
+      <DatePickerBase
         isMonthPickerVisible={ false }
         showMonthPickerAsOverlay={ true }
         value={ value }
@@ -67,7 +68,7 @@ describe('DatePicker', () => {
         showGoToToday={ false }
         dateTimeFormatter={ dateTimeFormatter }
       />
-    );
+    ).dive();
     datePicker.setState({ isDatePickerShown: true });
 
     const calendarProps = datePicker.find(Calendar).props();
@@ -167,48 +168,42 @@ describe('DatePicker', () => {
       goToToday: 'Go to today',
       isOutOfBoundsErrorMessage: 'out of bounds'
     };
-    let datePicker: ReactWrapper<any, any>;
+    let datePicker: ShallowWrapper<any, any>;
 
     beforeEach(() => {
-      datePicker = mount(
-        <DatePicker
+      datePicker = shallow(
+        <DatePickerBase
           allowTextInput={ true }
           minDate={ minDate }
           maxDate={ maxDate }
           value={ defaultDate }
           strings={ strings }
-        />);
-    });
-
-    afterEach(() => {
-      datePicker.unmount();
+        />).dive();
     });
 
     it('should throw validation error for date outside boundary', () => {
+      const input = datePicker.find('TextField').dive().find('input');
       // before minDate
-      datePicker.find('input')
-        .simulate('change', { target: { value: 'Jan 1 2010' } })
-        .simulate('blur');
+      input.simulate('change', { target: { value: 'Jan 1 2010' } });
+      input.simulate('blur');
       expect(datePicker.state('errorMessage')).toBe('out of bounds');
 
       // after maxDate
-      datePicker.find('input')
-        .simulate('change', { target: { value: 'Jan 1 2020' } })
-        .simulate('blur');
+      input.simulate('change', { target: { value: 'Jan 1 2020' } });
+      input.simulate('blur');
       expect(datePicker.state('errorMessage')).toBe('out of bounds');
     });
 
     it('should not throw validation error for date inside boundary', () => {
+      const input = datePicker.find('TextField').dive().find('input');
       // in boundary
-      datePicker.find('input')
-        .simulate('change', { target: { value: 'Dec 16 2017' } })
-        .simulate('blur');
+      input.simulate('change', { target: { value: 'Dec 16 2017' } });
+      input.simulate('blur');
       expect(datePicker.state('errorMessage')).toBeFalsy();
 
       // on boundary
-      datePicker.find('input')
-        .simulate('change', { target: { value: 'Jan 1 2017' } })
-        .simulate('blur');
+      input.simulate('change', { target: { value: 'Jan 1 2017' } });
+      input.simulate('blur');
       expect(datePicker.state('errorMessage')).toBeFalsy();
     });
 

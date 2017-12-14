@@ -2,11 +2,35 @@
 
 exports[`DatePicker renders default DatePicker correctly 1`] = `
 <div
-  className="ms-DatePicker"
+  className=
+      ms-DatePicker
+      {
+        box-shadow: none;
+        box-sizing: border-box;
+        margin-bottom: 0;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 0;
+        padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+      }
 >
   <div>
     <div
-      className="ms-TextField"
+      className=
+          ms-TextField
+          ms-DatePicker-textField
+          {
+            position: relative;
+          }
+          & input::-ms-clear {
+            display: none;
+          }
+          & input[readonly] {
+            cursor: pointer;
+          }
     >
       <div
         className="ms-TextField-wrapper"
@@ -44,6 +68,15 @@ exports[`DatePicker renders default DatePicker correctly 1`] = `
                 ms-DatePicker-event--without-label
                 {
                   display: inline-block;
+                }
+                {
+                  color: #666666;
+                  font-size: 16px;
+                  line-height: 18px;
+                  pointer-events: none;
+                  position: absolute;
+                  right: 9px;
+                  top: 7px;
                 }
             data-icon-name="Calendar"
             onClick={[Function]}

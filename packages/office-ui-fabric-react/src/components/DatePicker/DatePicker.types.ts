@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { DatePicker } from './DatePicker';
+import { DatePickerBase } from './DatePicker.base';
 import { DayOfWeek, ICalendarProps } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
+import { IStyle, ITheme } from '../../Styling';
+import { IStyleFunction } from '../../Utilities';
 
 export interface IDatePicker {
 
 }
 
-export interface IDatePickerProps extends React.Props<DatePicker> {
+export interface IDatePickerProps extends React.Props<DatePickerBase> {
   /**
    * Optional callback to access the IDatePicker interface. Use this instead of ref for accessing
    * the public methods and properties of the component.
@@ -164,6 +166,16 @@ export interface IDatePickerProps extends React.Props<DatePicker> {
    * The maximum allowable date.
    */
   maxDate?: Date;
+
+  /**
+   * Theme (provided through customization.)
+   */
+  theme?: ITheme;
+
+  /**
+   * Call to provide customized styling that will layer on top of the variant rules.
+   */
+  getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
 }
 
 export interface IDatePickerStrings {
@@ -230,4 +242,33 @@ export interface IDatePickerStrings {
    * Aria-label for the "next year" button.
    */
   nextYearAriaLabel?: string;
+}
+
+export interface IDatePickerStyleProps {
+
+  /**
+   * Theme to apply to the container.
+   */
+  theme: ITheme;
+
+  /**
+   * Custom class name to apply to the container.
+   */
+  className?: string;
+
+  hasLabel: boolean;
+}
+
+export interface IDatePickerStyles {
+
+  /**
+   * Base styles for root element.
+   */
+  root: IStyle;
+
+  textField: IStyle;
+
+  icon: IStyle;
+
+  callout: IStyle;
 }
