@@ -3,8 +3,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as ReactTestUtils from 'react-dom/test-utils';
 import * as renderer from 'react-test-renderer';
-import { TextFieldBase } from './TextField.base'
+import { TextFieldBase } from './TextField.base';
 import { TextField } from './TextField';
+import { ITextField } from './TextField.types';
 
 describe('TextField', () => {
   function renderIntoDocument(element: React.ReactElement<any>): HTMLElement {
@@ -411,7 +412,7 @@ describe('TextField', () => {
   });
 
   it('should select a range of text', () => {
-    let textField: TextFieldBase | undefined;
+    let textField: ITextField | undefined;
     const initialValue = 'initial value';
 
     const onSelect = () => {
@@ -421,7 +422,10 @@ describe('TextField', () => {
 
     renderIntoDocument(
       <TextFieldBase
-        componentRef={ (t) => textField = t! }
+        componentRef={
+          // tslint:disable-next-line:jsx-no-lambda
+          (t) => textField = t!
+        }
         defaultValue={ initialValue }
         onSelect={ onSelect }
       />

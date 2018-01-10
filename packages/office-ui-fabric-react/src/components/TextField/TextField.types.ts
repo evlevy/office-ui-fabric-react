@@ -1,9 +1,10 @@
 import {
   IStyle,
-  ITheme
+  ITheme,
+  IStyleFunction
 } from '../../Styling';
 import { ILabelStyles } from '../../Label';
-import { IRenderFunction, IStyleFunction } from '../../Utilities';
+import { IRenderFunction } from '../../Utilities';
 import { IIconProps } from '../../Icon';
 
 export interface ITextField {

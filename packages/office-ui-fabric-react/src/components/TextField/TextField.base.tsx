@@ -9,10 +9,10 @@ import {
   getNativeProps,
   inputProperties,
   textAreaProperties,
-  customizable,
-  classNamesFunction
+  customizable
 } from '../../Utilities';
 import { ITextFieldStyleProps, ITextFieldStyles } from './TextField.types';
+import { classNamesFunction } from '../../Styling';
 
 const getClassNames = classNamesFunction<ITextFieldStyleProps, ITextFieldStyles>();
 

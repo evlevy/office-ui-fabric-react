@@ -73,7 +73,7 @@ exports[`TextField renders TextField correctly 1`] = `
             display: none;
           }
           &:hover {
-            border-color: #212121;
+            border-color: #333333;
           }
           @media screen and (-ms-high-contrast: active){&:hover {
             border-color: Highlight;

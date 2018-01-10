@@ -1,4 +1,4 @@
-import { styled } from '../../Utilities';
+import { styled } from '../../Styling';
 import { TextFieldBase } from './TextField.base';
 import { ITextFieldProps } from './TextField.types';
 import { getStyles, getLabelStyles } from './TextField.styles';
