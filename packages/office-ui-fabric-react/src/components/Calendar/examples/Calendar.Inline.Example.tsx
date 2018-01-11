@@ -78,6 +78,7 @@ export interface ICalendarInlineExampleProps {
   showWeekNumbers?: boolean;
   minDate?: Date;
   maxDate?: Date;
+  showSixWeeksByDefault?: boolean;
 }
 
 export class CalendarInlineExample extends React.Component<ICalendarInlineExampleProps, ICalendarInlineExampleState> {

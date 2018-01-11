@@ -5,6 +5,7 @@ import {
 } from './DatePicker.types';
 import {
   Calendar,
+  CalendarBase,
   DayOfWeek
 } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
@@ -121,7 +122,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
   };
 
   private _root: HTMLElement;
-  private _calendar: Calendar;
+  private _calendar: CalendarBase;
   private _datepicker: HTMLDivElement;
   private _textField: TextFieldBase;
   private _preventFocusOpeningPicker: boolean;
@@ -156,7 +157,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
     });
 
     // Issue# 1274: Check if the date value changed from old value, i.e., if indeed a new date is being
-    // passed in or if the formatting function was modified. We only update the selected date if either of these
+    // passed in or if the formatting function was modified. We only uSpdate the selected date if either of these
     // had a legit change. Note tha the bug will still repro when only the formatDate was passed in props and this
     // is the result of the onSelectDate callback, but this should be a rare scenario.
     let oldValue = this.state.selectedDate;
@@ -182,7 +183,8 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
       borderless,
       className,
       minDate,
-      maxDate
+      maxDate,
+      calendarProps
     } = this.props;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
 
@@ -233,6 +235,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
             onPositioned={ this._onCalloutPositioned }
           >
             <Calendar
+              { ...calendarProps}
               onSelectDate={ this._onSelectDate }
               onDismiss={ this._calendarDismissed }
               isMonthPickerVisible={ this.props.isMonthPickerVisible }
@@ -248,7 +251,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
               dateTimeFormatter={ this.props.dateTimeFormatter }
               minDate={ minDate }
               maxDate={ maxDate }
-              ref={ this._resolveRef('_calendar') }
+              componentRef={ this._resolveRef('_calendar') }
             />
           </Callout>
         ) }
