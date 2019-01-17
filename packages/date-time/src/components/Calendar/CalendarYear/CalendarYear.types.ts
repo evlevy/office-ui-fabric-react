@@ -1,7 +1,7 @@
 import { IBaseProps, IRefObject, IStyleFunctionOrObject } from 'office-ui-fabric-react/lib/Utilities';
 import { ICalendarIconStrings } from '../Calendar.types';
 import { ITheme } from '@uifabric/styling';
-import { ICalendarPickerStyleProps, ICalendarPickerStyles } from '../CalendarPicker/CalendarPicker.types';
+import { ICalendarPickerStyleProps, ICalendarPickerStyles, ICalendarPickerProps } from '../CalendarPicker/CalendarPicker.types';
 
 export interface ICalendarYear {
   focus(): void;
@@ -113,7 +113,6 @@ export interface ICalendarYearProps extends IBaseProps<ICalendarYear> {
 export interface ICalendarYearStyleProps extends ICalendarPickerStyleProps {}
 
 export interface ICalendarYearStyles extends ICalendarPickerStyles {}
-
 export interface ICalendarYearHeaderProps extends ICalendarYearProps, ICalendarYearRange {
   /**
    * Callback action when the 'previous' navigation button is selected
@@ -125,3 +124,5 @@ export interface ICalendarYearHeaderProps extends ICalendarYearProps, ICalendarY
    */
   onSelectNext?: () => void;
 }
+
+export interface ICalendarYesrPickerProps extends ICalendarPickerProps<number> {}

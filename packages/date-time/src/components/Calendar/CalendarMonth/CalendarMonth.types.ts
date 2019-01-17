@@ -1,7 +1,7 @@
 import { IBaseProps, IRefObject, IStyleFunctionOrObject } from 'office-ui-fabric-react/lib/Utilities';
 import { ICalendarStrings, ICalendarIconStrings, ICalendarFormatDateCallbacks } from '../Calendar.types';
 import { ITheme } from '@uifabric/styling';
-import { ICalendarPickerStyleProps, ICalendarPickerStyles } from '../CalendarPicker/CalendarPicker.types';
+import { ICalendarPickerStyleProps, ICalendarPickerStyles, ICalendarPickerProps } from '../CalendarPicker/CalendarPicker.types';
 
 export interface ICalendarMonth {
   focus(): void;
@@ -116,3 +116,9 @@ export interface ICalendarMonthProps extends IBaseProps<ICalendarMonth> {
 export interface ICalendarMonthStyleProps extends ICalendarPickerStyleProps {}
 
 export interface ICalendarMonthStyles extends ICalendarPickerStyles {}
+
+export interface ICalendarMonthPickerProps extends ICalendarPickerProps<Date> {}
+
+export interface ICalendarMonthPicker {
+  focus(): void;
+}

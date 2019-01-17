@@ -2,7 +2,7 @@ import { DayOfWeek, FirstWeekOfYear, DateRangeType } from '../../utilities/dateV
 import { IRefObject, IBaseProps, IStyleFunctionOrObject } from '@uifabric/utilities';
 import { IStyle, ITheme } from '@uifabric/styling';
 import { ICalendarDayProps } from './CalendarDay/CalendarDay.types';
-import { ICalendarMonthProps } from './CalendarMonth/CalendarMonth.types';
+import { ICalendarMonthProps, ICalendarMonthPickerProps } from './CalendarMonth/CalendarMonth.types';
 
 export { DayOfWeek, DateRangeType, FirstWeekOfYear };
 
@@ -32,6 +32,8 @@ export interface ICalendarProps extends IBaseProps<ICalendar> {
    * Customized props for the calendar month
    */
   calendarMonthProps?: ICalendarMonthProps;
+
+  calendarMonthPickerProps?: ICalendarMonthPickerProps;
 
   /**
    * Theme provided by High-Order Component.
@@ -232,7 +234,7 @@ export interface ICalendarStrings {
   closeButtonAriaLabel?: string;
 
   /**
-   * Aria-label format string for the week number header. Should have 1 string param e.g. "week number {0}"
+   * Aria-label format string for the week number header. Should have 1 string param.
    */
   weekNumberFormatString?: string;
 }

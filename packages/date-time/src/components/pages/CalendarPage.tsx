@@ -4,6 +4,7 @@ import { DateRangeType, DayOfWeek } from '../Calendar/Calendar.types';
 import { CalendarButtonExample } from '../Calendar/examples/Calendar.Button.Example';
 import { CalendarInlineExample } from '../Calendar/examples/Calendar.Inline.Example';
 import { addMonths, addYears } from '../../utilities/dateMath/DateMath';
+import { Calendar2InlineExample } from '../Calendar/examples/Calendar2.Inline.Example';
 
 const CalendarButtonExampleCode = require('!raw-loader!@uifabric/date-time/src/components/Calendar/examples/Calendar.Button.Example.tsx') as string;
 const CalendarButtonExampleCodepen = require('!raw-loader!@uifabric/date-time/lib/codepen/components/Calendar/Calendar.Button.Example.Codepen.txt') as string;
@@ -40,6 +41,15 @@ export class CalendarPage extends React.Component<{}, {}> {
             </ExampleCard>
             <ExampleCard title="Inline Calendar with month picker" code={CalendarInlineExampleCode}>
               <CalendarInlineExample
+                dateRangeType={DateRangeType.Day}
+                autoNavigateOnSelection={false}
+                highlightCurrentMonth={false}
+                highlightSelectedMonth={true}
+                showGoToToday={true}
+              />
+            </ExampleCard>
+            <ExampleCard title="Inline Calendar2 with month picker" code={CalendarInlineExampleCode}>
+              <Calendar2InlineExample
                 dateRangeType={DateRangeType.Day}
                 autoNavigateOnSelection={false}
                 highlightCurrentMonth={false}

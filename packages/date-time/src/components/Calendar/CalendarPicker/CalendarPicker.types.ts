@@ -1,4 +1,45 @@
+import { IBaseProps, IStyleFunctionOrObject } from '@uifabric/utilities';
+import { ICalendarFormatDateCallbacks, ICalendarIconStrings, ICalendarStrings } from '../Calendar.types';
 import { IStyle, ITheme } from '@uifabric/styling';
+
+export interface ICalendarPicker {
+  focus(): void;
+}
+
+export interface ICalendarPickerState<T> {
+  navigated?: T;
+}
+
+export interface ICalendarPickerProps<T> extends IBaseProps<ICalendarPicker> {
+  styles?: IStyleFunctionOrObject<ICalendarPickerStyleProps, ICalendarPickerStyles>;
+  theme?: ITheme;
+  className?: string;
+  strings?: ICalendarStrings;
+  navigationIcons?: ICalendarIconStrings;
+  now?: T;
+  navigatedItem?: T;
+  selectedItem?: T;
+  minimum?: T;
+  maximum?: T;
+  itemFormatter?: ICalendarFormatDateCallbacks;
+  previousNavigationAriaLabel?: string;
+  nextNavigationAriaLabel?: string;
+  highlightCurrent?: boolean;
+  highlightSelected?: boolean;
+  allFocusable?: boolean;
+  onHeaderTitleSelect?: (focus: boolean) => void;
+}
+
+export interface ICalendarPickerGridCellProps {
+  key: string;
+  label: string;
+  // originalItem: T;
+  isInNavigatedContext: boolean; // context: month, decade, week, etc...
+  isNow: boolean;
+  isSelected: boolean;
+  isInBounds: boolean;
+  onSelected?: () => void;
+}
 
 export interface ICalendarPickerStyleProps {
   /**
